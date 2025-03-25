@@ -1,0 +1,119 @@
+/* Top Category Navigation Styles - Light Green Theme */
+.top-category-navbar {
+    width: 100%;
+    background-color: #f8fdf8;
+    padding: 10px 9px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    border-radius: 0 0 15px 15px;
+}
+
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto;
+    gap: 15px;
+}
+
+.category-tab {
+    flex: 1;
+    padding: 14px 20px;
+    text-align: center;
+    background-color: #f0f9f0;
+    color: #2c7a2c;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #e0f0e0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-tab::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, #a8e6a8, #7fd17f);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-tab:hover {
+    background-color: #e8f5e8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.category-tab:hover::before {
+    opacity: 1;
+}
+
+.category-tab.active {
+    background-color: #e0f4e0;
+    color: #1a651a;
+    border-color: #c5e8c5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.category-tab.active::before {
+    opacity: 1;
+    height: 6px;
+}
+
+.tab-text {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+/* Subtle animation on hover */
+.category-tab:hover .tab-text {
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
+}
+
+/* Dark mode support with light green theme */
+@media (prefers-color-scheme: dark) {
+    .top-category-navbar {
+        background-color: #1a231a;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-tab {
+        background-color: #1e2e1e;
+        color: #a8e6a8;
+        border-color: #2a3a2a;
+    }
+
+    .category-tab:hover {
+        background-color: #243024;
+    }
+
+    .category-tab.active {
+        background-color: #2a3d2a;
+        color: #c5e8c5;
+        border-color: #3a4d3a;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .category-tabs {
+        gap: 10px;
+    }
+
+    .category-tab {
+        padding: 12px 10px;
+    }
+
+    .tab-text {
+        font-size: 14px;
+    }
+}
+
