@@ -8,6 +8,7 @@ return array(
     'user-system' => 'User System',
     'meals' => 'Meals Section',
     'meal' => 'Meals',
+    'category' => 'Foods Categy',
     'users' => 'Users',
     'roles' => 'Roles',
     'permissions' => 'Permissions',

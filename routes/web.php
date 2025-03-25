@@ -7,6 +7,7 @@ use App\Http\Controllers\MealsController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[MealsController::class, 'randomize'])
@@ -28,8 +29,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('admin-panel');
     })->name('admin-panel');
 
+    Route::get('seed', function () {
+        $categories = [
+            ['name' => 'Suyuq'],
+            ['name' => 'Qo\'yiq'],
+            ['name' => 'Go\'shtli'],
+            ['name' => 'Go\'shtsiz'],
+            ['name' => 'Suyuq'],
+            ['name' => 'Fast food'],
+        ];
+
+        Category::query()->insert($categories);
+
+        return response()->json(['message' => 'Categories seeded successfully.']);
+    })->name('admin-panel');
+
     Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('meals', [MealsController::class, 'index'])->name('admin.meals.index');
+    Route::get('categories', [MealsController::class, 'categories'])->name('admin.categories.index');
     Route::get('food-randomize', [MealsController::class, 'randomize'])->name('users.randomize.index');
     Route::get('roles', [RoleController::class, 'index'])->name('admin.roles.index');
     Route::get('permissions', [PermissionController::class, 'index'])->name('admin.permissions.index');
@@ -41,3 +58,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+

@@ -50,6 +50,12 @@
                                 {{__('sidebar.meal')}}
                             </a>
                         </li>
+                        <li class="nav-item mt-2">
+                            <a class="nav-link fs-6 fw-bold" href="{{route('admin.categories.index')}}">
+                                <i class="mdi mdi-checkbox-marked-outline mdi-24px me-2"></i>
+                                {{__('sidebar.category')}}
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

@@ -15,4 +15,9 @@ class MealsController extends Controller
     {
         return view('users.food.index');
     }
+
+    public function categories()
+    {
+        return view('admin.Categories.index');
+    }
 }
