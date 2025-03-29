@@ -24,7 +24,7 @@
     @livewireStyles
 </head>
 <body>
-@include('layouts.user.navbar')
+{{--@include('layouts.user.navbar')--}}
 @include('layouts.user.top-navbar')
 
 <main>

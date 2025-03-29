@@ -2,8 +2,8 @@
 .top-category-navbar {
     width: 100%;
     background-color: #f8fdf8;
-    padding: 10px 9px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    padding: 3px 1px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
     border-radius: 0 0 15px 15px;
 }
 
@@ -17,15 +17,15 @@
 
 .category-tab {
     flex: 1;
-    padding: 14px 20px;
+    padding: 6px 10px;
     text-align: center;
     background-color: #f0f9f0;
     color: #2c7a2c;
-    border-radius: 12px;
+    border-radius: 6px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 200;
     transition: all 0.3s ease;
-    border: 2px solid #e0f0e0;
+    border: 1px solid #e0f0e0;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow: hidden;
