@@ -1,105 +1,80 @@
 <div class="food-randomizer">
-    <!-- Food display area -->
-    <div class="food-display">
-        <div class="food-image-container">
-            <img id="food-image" src="{{ asset('storage/'. $food['image']) }}" alt="{{ $food['name'] }}" class="food-image">
-
-            <!-- Food category badge -->
-            <div class="food-category">
-                <span>{{ $food['category'] ?? 'Uzbek' }}</span>
-            </div>
+    @if(!$isStarted)
+        <div class="welcome-screen">
+            <h1 class="welcome-title">Taom Tanlovchiga Xush Kelibsiz!</h1>
+            <p class="welcome-text">Bugungi taomingizni tasodifiy tanlash uchun tayyormisiz?</p>
+            <button class="start-btn" wire:click="startApp">Boshlash</button>
+        </div>
+    @else
+        <div class="food-display">
+            @if($isRandomizing)
+                <div class="randomizing-placeholder">
+                    <span class="spinner"></span>
+                    <p>Tanlanmoqda...</p>
+                </div>
+            @elseif($food)
+                <div class="food-image-container">
+                    <img src="{{ asset('storage/' . $food['image']) }}" alt="{{ $food['name'] }}" class="food-image">
+                    <div class="food-category">
+                        <span>{{ $food['category'] ?? 'Uzbek' }}</span>
+                    </div>
+                </div>
+                <div class="food-info">
+                    <h2 class="food-name">{{ $food['name'] }}</h2>
+                    <p class="food-description">{{ $food['description'] ?? 'Traditional Uzbek cuisine' }}</p>
+                    <button class="details-btn" wire:click="viewDetails">Batafsil ko‘rish</button>
+                </div>
+            @else
+                <div class="empty-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="food-placeholder-svg">
+                        <path d="M12 2c-3 0-5 2-5 5v10c0 3 2 5 5 5s5-2 5-5V7c0-3-2-5-5-5z"></path>
+                        <path d="M7 7h10"></path>
+                        <path d="M9 12h6"></path>
+                    </svg>
+                    <p>Taom tanlash uchun "Yangi Taom" tugmasini bosing</p>
+                </div>
+            @endif
         </div>
 
-        <div class="food-info">
-            <h2 id="food-name" class="food-name" style="font-weight: bold; color: darkcyan">{{ $food['name'] }}</h2>
-            <p class="food-description">{{ $food['description'] ?? 'Traditional Uzbek cuisine' }}</p>
+        <div class="controls">
+            <button class="randomize-btn {{ $isRandomizing || $cooldown ? 'disabled' : '' }}"
+                    wire:click="startRandomizing"
+                {{ $isRandomizing || $cooldown ? 'disabled' : '' }}>
+                @if($isRandomizing)
+                    Tanlanmoqda...
+                @elseif($cooldown)
+                    <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    {{ $cooldownSeconds }} s
+                @else
+                    Yangi Taom
+                @endif
+            </button>
         </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="controls">
-        <button class="randomize-btn {{ $isRunning ? 'disabled' : '' }}"
-                wire:click="startRandomizing"
-                id="start-button"
-            {{ $isRunning ? 'disabled' : '' }}>
-            <span class="btn-text">{{ $isRunning ? 'Randomizing...' : 'Find Food' }}</span>
-            <span class="btn-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14"></path>
-                    <path d="M12 5l7 7-7 7"></path>
-                </svg>
-            </span>
-        </button>
-    </div>
-
-    <!-- Result modal that appears after randomization -->
-    <div id="result-modal" class="result-modal {{ $showResult ? 'show' : '' }}">
-        <div class="result-content">
-            <div class="result-image-container">
-                <img src="{{ asset('storage/'. $food['image']) }}" alt="{{ $food['name'] }}" class="result-image">
-            </div>
-            <h2 class="result-title">Sizning taomingiz bugun . . .</h2>
-            <h3 class="result-food-name">{{ $food['name'] }}</h3>
-            <p class="result-description">{{ $food['description'] ?? 'Enjoy your delicious meal!' }}</p>
-            <button class="close-result-btn" wire:click="resetRandomizer">Qayta urunish</button>
-        </div>
-    </div>
+    @endif
 </div>
 
 <script>
-    document.addEventListener('start-randomizing', function() {
-        let foodImage = document.getElementById('food-image');
-        let foodName = document.getElementById('food-name');
-        let startButton = document.getElementById('start-button');
-        let resultModal = document.getElementById('result-modal');
+    document.addEventListener('start-randomizing', function () {
+        setTimeout(() => {
+            @this.selectFood();
+        }, 2000); // 2 soniya loader ko'rsatish
+    });
 
-        let foods = @json($foods);
-        let counter = 0;
-        let maxIterations = 20; // More iterations for a longer animation
+    document.addEventListener('start-cooldown', function () {
         let interval = setInterval(() => {
-            counter++;
-            let randomFood = foods[Math.floor(Math.random() * foods.length)];
+            let seconds = @this.cooldownSeconds;
+            seconds--;
+            @this.set('cooldownSeconds', seconds);
 
-            // Add a fade transition effect
-            foodImage.classList.add('transitioning');
-            foodName.classList.add('transitioning');
-
-            setTimeout(() => {
-                foodImage.src = randomFood.image;
-                foodName.innerText = randomFood.name;
-
-                foodImage.classList.remove('transitioning');
-                foodName.classList.remove('transitioning');
-            }, 100);
-
-            // Gradually slow down the randomization
-            if (counter > maxIterations * 0.7) {
+            if (seconds <= 0) {
                 clearInterval(interval);
-
-                // Start slowing down
-                let slowInterval = setInterval(() => {
-                    counter++;
-                    let randomFood = foods[Math.floor(Math.random() * foods.length)];
-
-                    foodImage.classList.add('transitioning');
-                    foodName.classList.add('transitioning');
-
-                    setTimeout(() => {
-                        foodImage.src = randomFood.image;
-                        foodName.innerText = randomFood.name;
-
-                        foodImage.classList.remove('transitioning');
-                        foodName.classList.remove('transitioning');
-                    }, 100);
-
-                    if (counter >= maxIterations) {
-                        clearInterval(slowInterval);
-                        startButton.disabled = false;
-                        @this.stopRandomizing();
-                    }
-                }, 300); // Slower interval
+                @this.set('cooldown', false);
             }
-        }, 100);
+        }, 1000); // Har 1 soniyada yangilash
     });
 </script>
+
 

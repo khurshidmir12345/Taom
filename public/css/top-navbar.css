@@ -1,7 +1,7 @@
-/* Top Category Navigation Styles - Light Green Theme */
+/* Top Category Navigation Styles - Light Brown Brand Theme */
 .top-category-navbar {
     width: 100%;
-    background-color: #f8fdf8;
+    background-color: #f8f5f0; /* Och jigarrang fon */
     padding: 3px 1px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
     border-radius: 0 0 15px 15px;
@@ -19,13 +19,13 @@
     flex: 1;
     padding: 6px 10px;
     text-align: center;
-    background-color: #f0f9f0;
-    color: #2c7a2c;
+    background-color: #f0e8df; /* Och jigarrangning yumshoq soyasi */
+    color: #5C4033; /* Qorong‘i jigarrang matn */
     border-radius: 6px;
     text-decoration: none;
     font-weight: 200;
     transition: all 0.3s ease;
-    border: 1px solid #e0f0e0;
+    border: 1px solid #e6d9c9; /* Engil chegara */
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow: hidden;
@@ -38,13 +38,13 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(to right, #a8e6a8, #7fd17f);
+    background: linear-gradient(to right, #F4A460, #C19A6B); /* Gradient aksent */
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .category-tab:hover {
-    background-color: #e8f5e8;
+    background-color: #e8dccf; /* Hoverda engil o‘zgarish */
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
@@ -54,9 +54,9 @@
 }
 
 .category-tab.active {
-    background-color: #e0f4e0;
-    color: #1a651a;
-    border-color: #c5e8c5;
+    background-color: #DEB887; /* Active holatda och jigarrang */
+    color: #3F2A1D; /* Qorong‘iroq matn */
+    border-color: #d9c8a9; /* Chegara */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -78,27 +78,27 @@
     transition: transform 0.2s ease;
 }
 
-/* Dark mode support with light green theme */
+/* Dark mode support with light brown theme */
 @media (prefers-color-scheme: dark) {
     .top-category-navbar {
-        background-color: #1a231a;
+        background-color: #3F2A1D; /* Qorong‘i jigarrang fon */
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
     }
 
     .category-tab {
-        background-color: #1e2e1e;
-        color: #a8e6a8;
-        border-color: #2a3a2a;
+        background-color: #5C4033; /* Qorong‘i jigarrang tab */
+        color: #D2B48C; /* Och jigarrang matn */
+        border-color: #6B4E3D;
     }
 
     .category-tab:hover {
-        background-color: #243024;
+        background-color: #6B4E3D; /* Hoverda engil o‘zgarish */
     }
 
     .category-tab.active {
-        background-color: #2a3d2a;
-        color: #c5e8c5;
-        border-color: #3a4d3a;
+        background-color: #8B5A2B; /* Active holatda o‘rta jigarrang */
+        color: #F4A460; /* Sandy brown matn */
+        border-color: #A0522D;
     }
 }
 
@@ -116,4 +116,3 @@
         font-size: 14px;
     }
 }
-

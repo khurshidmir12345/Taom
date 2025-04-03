@@ -3,83 +3,110 @@
 namespace App\Livewire\User\Randomize;
 
 use App\Models\Food;
+use App\Models\FoodUser;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class FoodRandomizeLivewire extends Component
 {
-    public $food;
-    public $isRunning = false;
-    public $showResult = false;
-
-    public $foods = [
-
-    ];
+    public $food = null;
+    public $isStarted = false;
+    public $isRandomizing = false;
+    public $cooldown = false;
+    public $cooldownSeconds = 0;
+    public $foods = [];
 
     public function mount()
     {
         $this->loadFoodsFromDatabase();
-        $this->selectRandomFood();
     }
+
     protected function loadFoodsFromDatabase()
     {
-        // Fetch foods from database with their media and category
-        $dbFoods = Food::with(['media', 'category'])->get();
+        $user = Auth::user();
+        $allFoods = Food::with(['media', 'category'])->get();
 
-        $this->foods = [];
+        $shownFoodIds = FoodUser::where('user_id', $user->id)
+            ->pluck('food_id')
+            ->toArray();
 
-        foreach ($dbFoods as $dbFood) {
-            // Get the first media item (image) for the food
-            $imageUrl = $dbFood->getFirstMediaUrl('food');
+        $remainingFoods = $allFoods->filter(function ($food) use ($shownFoodIds) {
+            return !in_array($food->id, $shownFoodIds);
+        });
 
-            // Get the category name if available
-            $categoryName = $dbFood->category ? $dbFood->category->name : 'categorya mavjud emas';
-
-            // Add to the foods array
-            $this->foods[] = [
-                'id' => $dbFood->id,
-                'name' => $dbFood->name_uz,
-                'image' => $dbFood->image,
-                'category' => $categoryName,
-                'description' => $dbFood->description
-            ];
+        if ($remainingFoods->isEmpty()) {
+            $remainingFoods = $allFoods;
+            FoodUser::where('user_id', $user->id)->delete();
         }
+
+        $this->foods = $remainingFoods->map(function ($food) {
+            return [
+                'id' => $food->id,
+                'name' => $food->name_uz,
+                'image' => $food->getFirstMediaUrl('foods') ?: $food->image,
+                'category' => $food->category ? $food->category->name : 'N/A',
+                'description' => $food->description
+            ];
+        })->toArray();
     }
 
-    protected function selectRandomFood()
+    public function startApp()
     {
-        if (count($this->foods) > 0) {
-            $this->food = $this->foods[array_rand($this->foods)];
-        } else {
-            $this->food = [
-                'name' => 'No foods found',
-                'image' => '/images/food-placeholder.jpg',
-                'category' => 'N/A',
-                'description' => 'Please add some foods to the database.'
-            ];
-        }
+        $this->isStarted = true;
     }
 
     public function startRandomizing()
     {
-        $this->isRunning = true;
-        $this->showResult = false;
-        $this->dispatch('start-randomizing');
+        if (!$this->isRandomizing && !$this->cooldown) {
+            $this->isRandomizing = true;
+            $this->food = null; // Loader ko'rsatish uchun taomni o'chiramiz
+            $this->dispatch('start-randomizing');
+        }
     }
 
-    public function stopRandomizing()
+    public function selectFood()
     {
-        $this->isRunning = false;
-        $this->food = $this->foods[array_rand($this->foods)];
-        $this->showResult = true;
+        if (count($this->foods) > 0) {
+            $this->food = $this->foods[array_rand($this->foods)];
+
+            $user = Auth::user();
+            $shownCount = FoodUser::where('user_id', $user->id)->count();
+
+            if ($shownCount >= 5) {
+                $oldest = FoodUser::where('user_id', $user->id)
+                    ->orderBy('created_at', 'asc')
+                    ->first();
+                $oldest->delete();
+            }
+
+            FoodUser::create([
+                'user_id' => $user->id,
+                'food_id' => $this->food['id'],
+            ]);
+
+            $this->loadFoodsFromDatabase();
+        } else {
+            $this->food = [
+                'name' => 'Taom topilmadi',
+                'image' => '/images/food-placeholder.jpg',
+                'category' => 'N/A',
+                'description' => 'Iltimos, taomlarni bazaga qo‘shing.'
+            ];
+        }
+
+        $this->isRandomizing = false;
+        $this->cooldown = true;
+        $this->cooldownSeconds = 15;
+        $this->dispatch('start-cooldown');
     }
 
-    public function resetRandomizer()
+    public function viewDetails()
     {
-        $this->showResult = false;
+        return redirect()->to('/food/' . $this->food['id']);
     }
+
     public function render()
     {
-        $this->food = $this->foods[array_rand($this->foods)];
         return view('livewire.user.randomize.food-randomize-livewire');
     }
 }
