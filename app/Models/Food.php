@@ -15,12 +15,14 @@ class Food extends Model implements HasMedia
         'name_uz',
         'name_ru',
         'description',
+        'image',
+        'food_type',
         'category_id',
     ];
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('foods')->singleFile();
+        $this->addMediaCollection('foods');
     }
     public function vegetables()
     {

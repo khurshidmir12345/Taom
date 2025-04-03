@@ -38,7 +38,7 @@ class FoodRandomizeLivewire extends Component
             $this->foods[] = [
                 'id' => $dbFood->id,
                 'name' => $dbFood->name_uz,
-                'image' => $imageUrl,
+                'image' => $dbFood->image,
                 'category' => $categoryName,
                 'description' => $dbFood->description
             ];

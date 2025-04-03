@@ -43,11 +43,8 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        if (auth()->user()->type === 'admin') {
-            $this->redirectIntended(default: route('admin-panel', absolute: false), navigate: true);
-        } else {
-            $this->redirectIntended(default: route('users.randomize.index', absolute: false), navigate: true);
-        }
+
+        $this->redirectIntended(default: route('users.randomize.index', absolute: false), navigate: true);
     }
 
     /**

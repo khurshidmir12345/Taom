@@ -2,7 +2,7 @@
     <!-- Food display area -->
     <div class="food-display">
         <div class="food-image-container">
-            <img id="food-image" src="{{ $food['image'] }}" alt="{{ $food['name'] }}" class="food-image">
+            <img id="food-image" src="{{ asset('storage/'. $food['image']) }}" alt="{{ $food['name'] }}" class="food-image">
 
             <!-- Food category badge -->
             <div class="food-category">
@@ -36,12 +36,12 @@
     <div id="result-modal" class="result-modal {{ $showResult ? 'show' : '' }}">
         <div class="result-content">
             <div class="result-image-container">
-                <img src="{{ $food['image'] }}" alt="{{ $food['name'] }}" class="result-image">
+                <img src="{{ asset('storage/'. $food['image']) }}" alt="{{ $food['name'] }}" class="result-image">
             </div>
-            <h2 class="result-title">Your Food Choice</h2>
+            <h2 class="result-title">Sizning taomingiz bugun . . .</h2>
             <h3 class="result-food-name">{{ $food['name'] }}</h3>
             <p class="result-description">{{ $food['description'] ?? 'Enjoy your delicious meal!' }}</p>
-            <button class="close-result-btn" wire:click="resetRandomizer">Try Again</button>
+            <button class="close-result-btn" wire:click="resetRandomizer">Qayta urunish</button>
         </div>
     </div>
 </div>

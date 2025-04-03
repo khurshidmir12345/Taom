@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\MealsController;
+use App\Http\Controllers\SocialAuthController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -33,29 +34,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $categories = [
             ['name' => 'Suyuq'],
             ['name' => 'Qo\'yiq'],
-            ['name' => 'Go\'shtli'],
-            ['name' => 'Go\'shtsiz'],
-            ['name' => 'Suyuq'],
             ['name' => 'Fast food'],
         ];
 
         Category::query()->insert($categories);
 
         return response()->json(['message' => 'Categories seeded successfully.']);
-    })->name('admin-panel');
+    });
 
-    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('meals', [MealsController::class, 'index'])->name('admin.meals.index');
-    Route::get('categories', [MealsController::class, 'categories'])->name('admin.categories.index');
     Route::get('food-randomize', [MealsController::class, 'randomize'])->name('users.randomize.index');
-    Route::get('roles', [RoleController::class, 'index'])->name('admin.roles.index');
-    Route::get('permissions', [PermissionController::class, 'index'])->name('admin.permissions.index');
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
+
+Route::get('/auth/google', [SocialAuthController::class, 'redirect'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialAuthController::class, 'callback']);
 
 require __DIR__.'/auth.php';
 
