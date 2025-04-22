@@ -16,6 +16,11 @@ class MealsController extends Controller
         return view('users.food.index');
     }
 
+    public function history()
+    {
+        return view('users.food.history');
+    }
+
     public function categories()
     {
         return view('admin.Categories.index');

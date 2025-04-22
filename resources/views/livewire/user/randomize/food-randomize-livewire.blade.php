@@ -12,17 +12,25 @@
                     <span class="spinner"></span>
                     <p>Tanlanmoqda...</p>
                 </div>
-            @elseif($food)
+            @elseif($food && !$foodHistoryMessage)
                 <div class="food-image-container">
                     <img src="{{ asset('storage/' . $food['image']) }}" alt="{{ $food['name'] }}" class="food-image">
                     <div class="food-category">
-                        <span>{{ $food['category'] ?? 'Uzbek' }}</span>
+                        <span>{{ $food['category'] ?? 'Nomalum' }}</span>
                     </div>
                 </div>
                 <div class="food-info">
                     <h2 class="food-name">{{ $food['name'] }}</h2>
-                    <p class="food-description">{{ $food['description'] ?? 'Traditional Uzbek cuisine' }}</p>
-                    <button class="details-btn" wire:click="viewDetails">Batafsil ko‘rish</button>
+                    <p class="food-description">{{ $food['description'] ?? 'O`zbek milliy taomi' }}</p>
+                    <button class="details-btn" wire:click="accept">Tanlayman ✅</button>
+                </div>
+            @elseif($foodHistoryMessage)
+                <div class="food-history-card">
+                    <div class="card-content">
+                        <h2 class="card-title">{{$foodHistoryMessage[0]['title']}}</h2>
+                        <p class="card-message">{{$foodHistoryMessage[0]['message']}}</p>
+                        <button class="card-close-btn" wire:click="clearHistoryMessage">Yopish</button>
+                    </div>
                 </div>
             @else
                 <div class="empty-card">

@@ -76,4 +76,17 @@ class User extends Authenticatable
     {
         $this->belongsToMany(Vegetable::class, 'food_user');
     }
+
+    function getCurrentMealType(): string
+    {
+        $hour = now()->hour;
+
+        if ($hour < 10) {
+            return 'Nonushta';
+        } elseif ($hour >= 10 && $hour < 15) {
+            return 'Tushlik';
+        } else {
+            return 'Kechki ovqat';
+        }
+    }
 }

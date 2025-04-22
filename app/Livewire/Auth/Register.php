@@ -33,7 +33,7 @@ class Register extends Component
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        $validated['type'] = $validated['email'] == 'mirzajonovx86@gmail.com' ? 'admin' : 'user';
+        $validated['type'] = 'user';
 
         $user = User::query()->create($validated);
 
@@ -41,11 +41,7 @@ class Register extends Component
 
         Auth::login($user);
 
+        $this->redirect(route('users.randomize.index', absolute: false), navigate: true);
 
-        if ($user->type === 'admin') {
-            $this->redirect(route('admin-panel', absolute: false), navigate: true);
-        } else {
-            $this->redirect(route('users.randomize.index', absolute: false), navigate: true);
-        }
     }
 }

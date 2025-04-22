@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('css/settings-sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/randomize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/top-navbar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/food-history.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
@@ -37,6 +38,7 @@
 @livewireScripts
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/settings-sidebar.js') }}"></script>
+<script src="//unpkg.com/alpinejs" defer></script>
 @yield('scripts')
 </body>
 </html>

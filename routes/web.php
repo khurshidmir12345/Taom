@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('food-randomize', [MealsController::class, 'randomize'])->name('users.randomize.index');
+    Route::get('food-history', [MealsController::class, 'history'])->name('users.food.history');
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');

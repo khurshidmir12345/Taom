@@ -3,6 +3,7 @@
 namespace App\Livewire\User\Randomize;
 
 use App\Models\Food;
+use App\Models\FoodHistory;
 use App\Models\FoodUser;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -15,6 +16,7 @@ class FoodRandomizeLivewire extends Component
     public $cooldown = false;
     public $cooldownSeconds = 0;
     public $foods = [];
+    public $foodHistoryMessage = [];
 
     public function mount()
     {
@@ -57,6 +59,7 @@ class FoodRandomizeLivewire extends Component
 
     public function startRandomizing()
     {
+        $this->foodHistoryMessage = null;
         if (!$this->isRandomizing && !$this->cooldown) {
             $this->isRandomizing = true;
             $this->food = null; // Loader ko'rsatish uchun taomni o'chiramiz
@@ -96,13 +99,50 @@ class FoodRandomizeLivewire extends Component
 
         $this->isRandomizing = false;
         $this->cooldown = true;
-        $this->cooldownSeconds = 15;
+        $this->cooldownSeconds = 30;
         $this->dispatch('start-cooldown');
     }
 
-    public function viewDetails()
+    public function accept()
     {
-        return redirect()->to('/food/' . $this->food['id']);
+        if ($this->food) {
+            $user = Auth::user();
+            $today = now()->toDateString();
+            $mealType = $user->getCurrentMealType();
+
+            $alreadyAdded = FoodHistory::query()->where('user_id', auth()->id())
+                ->where('date', $today)
+                ->where('meal_type', $mealType)
+                ->exists();
+
+            if ($alreadyAdded) {
+                $this->foodHistoryMessage[] = [
+                    'success' => false,
+                    'title' => '❌ Taom saqlanmadi.',
+                    'message' => "$mealType uchun taom allaqachon tanlangan."
+                ];
+            } else {
+                $history = FoodHistory::query()->create([
+                    'user_id' => auth()->id(),
+                    'food_id' => $this->food['id'],
+                    'meal_type' => $mealType,
+                    'date' => $today,
+                ]);
+
+                $this->foodHistoryMessage[] = [
+                    'success' => true,
+                    'title' => '✅ Taom saqlandi.',
+                    'message' => "$mealType uchun {$this->food['name']} taomlaringiz tarixi ro'yxatiga yozib qo'yildi."
+                ];
+            }
+        } else {
+            $this->foodHistoryMessage = "Tanlangan taom topilmadi.";
+        }
+    }
+
+    public function clearHistoryMessage()
+    {
+        $this->foodHistoryMessage = null;
     }
 
     public function render()

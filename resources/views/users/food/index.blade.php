@@ -38,6 +38,57 @@
             color: #999;
         }
     </style>
+    <style>
+        .food-history-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            margin: 20px auto;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .card-message {
+            font-size: 0.875rem;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .card-close-btn {
+            background: #3182ce;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .card-close-btn:hover {
+            background: #2b6cb0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 @endsection
 @section('content')
     @livewire('user.randomize.food-randomize-livewire')
