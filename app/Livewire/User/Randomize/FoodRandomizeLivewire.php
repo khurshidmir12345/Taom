@@ -99,7 +99,7 @@ class FoodRandomizeLivewire extends Component
 
         $this->isRandomizing = false;
         $this->cooldown = true;
-        $this->cooldownSeconds = 30;
+        $this->cooldownSeconds = 20;
         $this->dispatch('start-cooldown');
     }
 

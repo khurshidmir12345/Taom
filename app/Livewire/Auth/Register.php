@@ -34,6 +34,7 @@ class Register extends Component
 
         $validated['password'] = Hash::make($validated['password']);
         $validated['type'] = 'user';
+        $validated['email_verified_at'] = now();
 
         $user = User::query()->create($validated);
 

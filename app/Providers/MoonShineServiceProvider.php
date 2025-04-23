@@ -31,8 +31,8 @@ class MoonShineServiceProvider extends ServiceProvider
             ->resources([
                 MoonShineUserResource::class,
                 MoonShineUserRoleResource::class,
-                UserResource::class,
                 FoodResource::class,
+                UserResource::class,
                 CategoryResource::class,
             ])
             ->pages([

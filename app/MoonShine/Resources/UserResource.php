@@ -6,31 +6,67 @@ namespace App\MoonShine\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\MoonShine\Pages\User\UserIndexPage;
-use App\MoonShine\Pages\User\UserFormPage;
-use App\MoonShine\Pages\User\UserDetailPage;
 
 use MoonShine\Laravel\Resources\ModelResource;
-use MoonShine\Laravel\Pages\Page;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\Email;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Text;
 
 /**
- * @extends ModelResource<User, UserIndexPage, UserFormPage, UserDetailPage>
+ * @extends ModelResource<User>
  */
 class UserResource extends ModelResource
 {
     protected string $model = User::class;
 
     protected string $title = 'Users';
-    
+
     /**
-     * @return list<Page>
+     * @return list<FieldContract>
      */
-    protected function pages(): array
+    protected function indexFields(): iterable
     {
         return [
-            UserIndexPage::class,
-            UserFormPage::class,
-            UserDetailPage::class,
+            ID::make()->sortable(),
+            Text::make('name'),
+            Email::make('email'),
+            Text::make('type')->badge('primary'),
+            Date::make('email_verified_at')->format('d.m.Y')->badge('success'),
+        ];
+    }
+
+    /**
+     * @return list<ComponentContract|FieldContract>
+     */
+    protected function formFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('name'),
+            Email::make('email'),
+            Text::make('type')->badge('primary'),
+            Date::make('email_verified_at')->format('d.m.Y')->badge('success'),
+        ];
+    }
+
+    /**
+     * @return list<FieldContract>
+     */
+    protected function detailFields(): iterable
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('name'),
+            Email::make('email'),
+            Text::make('type')->badge('primary'),
+            Date::make('email_verified_at')->format('d.m.Y')->badge('success'),
+            Text::make('google_id'),
+            Text::make('google_token'),
+            Text::make('google_refresh_token'),
         ];
     }
 
