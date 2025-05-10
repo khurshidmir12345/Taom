@@ -88,9 +88,28 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /*.controls {*/
+        /*    position: fixed;*/
+        /*    bottom: 35px;*/
+        /*    left: 50%;*/
+        /*    transform: translateX(-50%);*/
+        /*    width: 100%;*/
+        /*    max-width: 400px;*/
+        /*    padding: 0 16px;*/
+        /*    z-index: 10;*/
+        /*    text-align: center;*/
+        /*}*/
     </style>
+
+
+
 @endsection
 @section('content')
     @livewire('user.randomize.food-randomize-livewire')
+@endsection
+
+@section('scripts')
+
 @endsection
 

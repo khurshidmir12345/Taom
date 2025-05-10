@@ -14,6 +14,7 @@ use MoonShine\UI\Fields\Email;
 use MoonShine\UI\Fields\ID;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\UI\Fields\Password;
 use MoonShine\UI\Fields\Text;
 
 /**
@@ -49,6 +50,7 @@ class UserResource extends ModelResource
             Text::make('name'),
             Email::make('email'),
             Text::make('type')->badge('primary'),
+            Password::make('password'),
             Date::make('email_verified_at')->format('d.m.Y')->badge('success'),
         ];
     }

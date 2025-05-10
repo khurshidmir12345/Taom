@@ -41,7 +41,8 @@ class CategoryResource extends ModelResource
     {
         return [
             Box::make([
-                ID::make(),
+                ID::make()->sortable(),
+                Text::make('name')->sortable(),
             ])
         ];
     }
@@ -52,7 +53,8 @@ class CategoryResource extends ModelResource
     protected function detailFields(): iterable
     {
         return [
-            ID::make(),
+            ID::make()->sortable(),
+            Text::make('name')->sortable(),
         ];
     }
 
