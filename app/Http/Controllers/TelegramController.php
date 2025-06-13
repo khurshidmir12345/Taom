@@ -232,6 +232,13 @@ class TelegramController extends Controller
                 throw new \Exception("Food not found: {$foodName}");
             }
 
+            // Store in FoodHistory
+            FoodHistory::create([
+                'user_id' => $user->id,
+                'food_id' => $food->id,
+                'meal_type' => 'Lunch' // You can modify this based on your needs
+            ]);
+
             // Send confirmation message
             $response = Telegram::sendMessage([
                 'chat_id' => $user->telegram_chat_id,
@@ -262,7 +269,7 @@ class TelegramController extends Controller
     {
         try {
             // Get user's food history with food details
-            $foodHistory = FoodUser::with('food')
+            $foodHistory = FoodHistory::with('food')
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
