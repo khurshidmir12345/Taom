@@ -18,7 +18,7 @@ class TelegramController extends Controller
     public function webhook(Request $request)
     {
         try {
-            $update = Telegram::commandsHandler(true);
+            $update = Telegram::getWebhookUpdate();
             $message = $update->getMessage();
             $chatId = $message->getChat()->getId();
             $username = $message->getChat()->getUsername();
@@ -29,7 +29,7 @@ class TelegramController extends Controller
             // Handle /start command
             if ($text === '/start') {
                 $user = User::where('telegram_chat_id', $chatId)->first();
-                
+
                 if (!$user) {
                     // Create new user if not exists
                     $user = User::create([
@@ -212,7 +212,7 @@ class TelegramController extends Controller
         try {
             $message = $callbackQuery->getMessage();
             $caption = $message->getCaption();
-            
+
             if (!$caption) {
                 throw new \Exception("No caption found in message");
             }
@@ -250,7 +250,7 @@ class TelegramController extends Controller
                 'exception' => $e,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             Telegram::sendMessage([
                 'chat_id' => $user->telegram_chat_id,
                 'text' => "😔 Kechirasiz, xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring."
@@ -289,7 +289,7 @@ class TelegramController extends Controller
             foreach ($foodHistory as $index => $history) {
                 $food = $history->food;
                 $date = $history->created_at->format('d.m.Y H:i');
-                
+
                 $message .= ($index + 1) . ". *{$food->name_uz}*\n";
                 $message .= "   📅 {$date}\n";
                 $message .= "   ⏱️ {$history->meal_type}\n\n";
@@ -325,4 +325,4 @@ class TelegramController extends Controller
             ]);
         }
     }
-} 
+}
