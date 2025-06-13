@@ -59,7 +59,7 @@ Route::get('/auth/google/callback', [SocialAuthController::class, 'callback']);
 
 Route::get('/set-webhook', function () {
     $response = Telegram::setWebhook([
-        'url' => 'https://chefit.uz/api/telegram/webhook',
+        'url' => 'https://7144-102-43-195-61.ngrok-free.app/api/telegram/webhook',
     ]);
 
     return $response;

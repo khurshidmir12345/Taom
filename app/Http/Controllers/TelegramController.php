@@ -232,12 +232,33 @@ class TelegramController extends Controller
                 throw new \Exception("Food not found: {$foodName}");
             }
 
-            // Store in FoodHistory
+            // Determine meal type based on current time
+            $currentHour = now()->hour;
+            $mealType = 'Tushlik'; // Default to lunch
+
+            if ($currentHour < 10) {
+                $mealType = 'Nonushta';
+            } elseif ($currentHour > 15) {
+                $mealType = 'Kechki ovqat';
+            }
+
+            $foodHistory = FoodHistory::where('user_id', $user->id)
+                ->where('meal_type', $mealType)
+                ->first();
+
+            if ($foodHistory) {
+                $foodHistory->update([
+                    'food_id' => $food->id,
+                ]);
+            } else {
+                // Store in FoodHistory
             FoodHistory::create([
                 'user_id' => $user->id,
                 'food_id' => $food->id,
-                'meal_type' => 'Lunch' // You can modify this based on your needs
+                'meal_type' => $mealType,
+                'date' => now()->format('Y-m-d'),
             ]);
+            }
 
             // Send confirmation message
             $response = Telegram::sendMessage([
@@ -295,9 +316,11 @@ class TelegramController extends Controller
             foreach ($foodHistory as $index => $history) {
                 $food = $history->food;
                 $date = $history->created_at->format('d.m.Y H:i');
+                $mealType = $history->meal_type;
 
                 $message .= ($index + 1) . ". *{$food->name_uz}*\n";
-                $message .= "   📅 {$date}\n\n";
+                $message .= "   📅 {$date}\n";
+                $message .= "   ⏱️ {$mealType}\n\n";
             }
 
             Telegram::editMessageText([
