@@ -13,6 +13,7 @@ class FoodHistory extends Model
         'food_id',
         'meal_type',
         'date',
+        'message_id'
     ];
 
     public function user()

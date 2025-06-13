@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +27,12 @@ class User extends Authenticatable
         'google_id',
         'google_token',
         'google_refresh_token',
+        'telegram_chat_id',
+        'telegram_username',
+        'telegram_first_name',
+        'telegram_last_name',
+        'is_telegram_verified',
+        'last_message_id',
     ];
 
     /**
@@ -48,6 +55,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_telegram_verified' => 'boolean',
         ];
     }
 
@@ -88,5 +96,34 @@ class User extends Authenticatable
         } else {
             return 'Kechki ovqat';
         }
+    }
+
+    public function hasTelegram()
+    {
+        return !is_null($this->telegram_chat_id);
+    }
+
+    public function getTelegramFullName()
+    {
+        if ($this->telegram_first_name && $this->telegram_last_name) {
+            return $this->telegram_first_name . ' ' . $this->telegram_last_name;
+        }
+        return $this->telegram_first_name ?? $this->telegram_username ?? 'Unknown';
+    }
+
+    public function updateTelegramInfo($chatId, $username, $firstName, $lastName)
+    {
+        $this->update([
+            'telegram_chat_id' => $chatId,
+            'telegram_username' => $username,
+            'telegram_first_name' => $firstName,
+            'telegram_last_name' => $lastName,
+            'is_telegram_verified' => true,
+        ]);
+    }
+
+    public function updateLastMessageId($messageId)
+    {
+        $this->update(['last_message_id' => $messageId]);
     }
 }

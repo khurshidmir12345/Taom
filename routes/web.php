@@ -10,6 +10,7 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 Route::get('/',[MealsController::class, 'randomize'])
     ->middleware(['auth', 'verified'])
@@ -53,6 +54,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/auth/google', [SocialAuthController::class, 'redirect'])->name('auth.google');
 Route::get('/auth/google/callback', [SocialAuthController::class, 'callback']);
+
+
+
+Route::get('/set-webhook', function () {
+    $response = Telegram::setWebhook([
+        'url' => 'https://2f21-102-43-195-61.ngrok-free.app/api/telegram/webhook',
+    ]);
+
+    return $response;
+});
 
 require __DIR__.'/auth.php';
 
