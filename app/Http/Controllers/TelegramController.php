@@ -155,7 +155,7 @@ class TelegramController extends Controller
                 ->inline()
                 ->row([
                     Keyboard::inlineButton(['text' => '✅ Qabul qilish', 'callback_data' => 'accept_food']),
-                    Keyboard::inlineButton(['text' => '❌ Rad etish', 'callback_data' => 'reject_food'])
+                    Keyboard::inlineButton(['text' => '🔄 Boshqa tanlash', 'callback_data' => 'reject_food'])
                 ]);
 
             // Send food image if exists
@@ -262,7 +262,7 @@ class TelegramController extends Controller
     {
         try {
             // Get user's food history with food details
-            $foodHistory = FoodHistory::with('food')
+            $foodHistory = FoodUser::with('food')
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -290,8 +290,7 @@ class TelegramController extends Controller
                 $date = $history->created_at->format('d.m.Y H:i');
 
                 $message .= ($index + 1) . ". *{$food->name_uz}*\n";
-                $message .= "   📅 {$date}\n";
-                $message .= "   ⏱️ {$history->meal_type}\n\n";
+                $message .= "   📅 {$date}\n\n";
             }
 
             Telegram::editMessageText([
