@@ -15,6 +15,14 @@ use App\MoonShine\Resources\UsersResource;
 use App\MoonShine\Resources\UserResource;
 use App\MoonShine\Resources\FoodResource;
 use App\MoonShine\Resources\CategoryResource;
+use MoonShine\Menu\MenuGroup;
+use MoonShine\Menu\MenuItem;
+use MoonShine\Resources\CustomPage;
+use App\MoonShine\Resources\CafeResource;
+use App\MoonShine\Resources\BotUserResource;
+use App\MoonShine\Resources\ProductCategoryResource;
+use App\MoonShine\Resources\ProductResource;
+use App\MoonShine\Resources\ProductVoteResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -34,10 +42,14 @@ class MoonShineServiceProvider extends ServiceProvider
                 FoodResource::class,
                 UserResource::class,
                 CategoryResource::class,
+                CafeResource::class,
+                BotUserResource::class,
+                ProductCategoryResource::class,
+                ProductResource::class,
+                ProductVoteResource::class,
             ])
             ->pages([
                 ...$config->getPages(),
-            ])
-        ;
+            ]);
     }
 }

@@ -10,6 +10,7 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 Route::get('/',[MealsController::class, 'randomize'])
@@ -31,17 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('admin-panel');
     })->name('admin-panel');
 
-    Route::get('seed', function () {
-        $categories = [
-            ['name' => 'Suyuq'],
-            ['name' => 'Qo\'yiq'],
-            ['name' => 'Fast food'],
-        ];
-
-        Category::query()->insert($categories);
-
-        return response()->json(['message' => 'Categories seeded successfully.']);
-    });
 
     Route::get('food-randomize', [MealsController::class, 'randomize'])->name('users.randomize.index');
     Route::get('food-history', [MealsController::class, 'history'])->name('users.food.history');
@@ -63,6 +53,14 @@ Route::get('/set-webhook', function () {
     ]);
 
     return $response;
+});
+
+Route::get('/set-bot/{token}', function ($token) {
+    $telegram = new Api($token);
+    $domain = 'https://f586-102-43-195-61.ngrok-free.app';
+    $telegram->setWebhook(['url' =>  $domain.'/api/menu_bot/' . $token]);
+
+    return 'ulandi';
 });
 
 require __DIR__.'/auth.php';

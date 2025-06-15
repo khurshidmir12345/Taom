@@ -4,37 +4,20 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Layouts;
 
-use MoonShine\Laravel\Layouts\AppLayout;
-use MoonShine\ColorManager\ColorManager;
-use MoonShine\Contracts\ColorManager\ColorManagerContract;
-use MoonShine\Laravel\Components\Layout\{Locales, Notifications, Profile, Search};
-use MoonShine\UI\Components\{Breadcrumbs,
-    Components,
-    Layout\Flash,
-    Layout\Div,
-    Layout\Body,
-    Layout\Burger,
-    Layout\Content,
-    Layout\Footer,
-    Layout\Head,
-    Layout\Favicon,
-    Layout\Assets,
-    Layout\Meta,
-    Layout\Header,
-    Layout\Html,
-    Layout\Layout,
-    Layout\Logo,
-    Layout\Menu,
-    Layout\Sidebar,
-    Layout\ThemeSwitcher,
-    Layout\TopBar,
-    Layout\Wrapper,
-    When};
-use App\MoonShine\Resources\UsersResource;
-use MoonShine\MenuManager\MenuItem;
-use App\MoonShine\Resources\UserResource;
-use App\MoonShine\Resources\FoodResource;
 use App\MoonShine\Resources\CategoryResource;
+use App\MoonShine\Resources\FoodResource;
+use App\MoonShine\Resources\UserResource;
+use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\Contracts\ColorManager\ColorManagerContract;
+
+// Resurslar
+use App\MoonShine\Resources\CafeResource;
+use App\MoonShine\Resources\ProductResource;
+use App\MoonShine\Resources\ProductCategoryResource;
+use App\MoonShine\Resources\BotUserResource;
+use MoonShine\MenuManager\MenuDivider;
+use MoonShine\MenuManager\MenuGroup;
+use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -48,25 +31,30 @@ final class MoonShineLayout extends AppLayout
     protected function menu(): array
     {
         return [
+            MenuGroup::make('Menyu bot system', [
+                MenuItem::make('Choyxona', CafeResource::class),
+                MenuItem::make('Maxsulotlar', ProductResource::class),
+                MenuItem::make('Kategoriyalar', ProductCategoryResource::class),
+                MenuItem::make('Bot foydalanuvchilari', BotUserResource::class),
+                MenuDivider::make(),
+            ]),
+
+            MenuGroup::make('Random food system', [
+                MenuItem::make('User', UserResource::class),
+                MenuItem::make('Category', CategoryResource::class),
+                MenuItem::make('Food', FoodResource::class),
+                MenuDivider::make(),
+            ]),
+
             ...parent::menu(),
-            MenuItem::make('Users', UserResource::class),
-            MenuItem::make('Food', FoodResource::class),
-            MenuItem::make('Categories', CategoryResource::class),
         ];
     }
 
-    /**
-     * @param ColorManager $colorManager
-     */
     protected function colors(ColorManagerContract $colorManager): void
     {
         parent::colors($colorManager);
 
-        // $colorManager->primary('#00000');
-    }
-
-    public function build(): Layout
-    {
-        return parent::build();
+        // Ranglar sozlashni hohlasangiz shu yerga yozing, masalan:
+        // $colorManager->primary('#3B82F6');
     }
 }

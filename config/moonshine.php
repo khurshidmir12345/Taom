@@ -28,7 +28,7 @@ return [
     // Default flags
     'use_migrations' => true,
     'use_notifications' => true,
-    'use_database_notifications' => false,
+    'use_database_notifications' => true,
     'use_profile' => true,
 
     // Routing
