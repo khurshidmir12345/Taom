@@ -57,7 +57,7 @@ Route::get('/set-webhook', function () {
 
 Route::get('/set-bot/{token}', function ($token) {
     $telegram = new Api($token);
-    $domain = 'https://f586-102-43-195-61.ngrok-free.app';
+    $domain = 'https://chefit.uz';
     $telegram->setWebhook(['url' =>  $domain.'/api/menu_bot/' . $token]);
 
     return 'ulandi';
