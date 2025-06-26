@@ -44,9 +44,9 @@ return [
             ],
         ],
 
-        //        'mySecondBot' => [
-        //            'token' => '123456:abc',
-        //        ],
+        'hisobchi_bot' => [
+            'token' => env('HISOBCHI_BOT_TOKEN', '7219173664:AAHMEZk241OQLwFTdZ0BcxsKs0W6CDjQH64'),
+        ],
     ],
 
     /*

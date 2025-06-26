@@ -63,5 +63,14 @@ Route::get('/set-bot/{token}', function ($token) {
     return 'ulandi';
 });
 
+Route::get('/set-hisobchi', function () {
+    $token = config('telegram.bots.hisobchi_bot.token');
+    $telegram = new Api($token);
+    $domain = 'https://chefit.uz';
+    $telegram->setWebhook(['url' =>  $domain.'/api/hisobchi/webhook']);
+
+    return 'ulandi';
+});
+
 require __DIR__.'/auth.php';
 

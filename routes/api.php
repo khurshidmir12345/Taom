@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HisobchiBotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TelegramController;
@@ -12,3 +13,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
 
 Route::post('menu_bot/{token}', [MenuBotController::class, 'handle']);
+
+Route::post('hisobchi/webhook', [HisobchiBotController::class, 'handle']);
+
+
