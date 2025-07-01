@@ -18,6 +18,7 @@ use App\MoonShine\Resources\BotUserResource;
 use MoonShine\MenuManager\MenuDivider;
 use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
+use App\MoonShine\Resources\DailyReminderResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -43,10 +44,12 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make('User', UserResource::class),
                 MenuItem::make('Category', CategoryResource::class),
                 MenuItem::make('Food', FoodResource::class),
+                MenuItem::make('DailyReminders', DailyReminderResource::class),
                 MenuDivider::make(),
             ]),
 
             ...parent::menu(),
+           
         ];
     }
 

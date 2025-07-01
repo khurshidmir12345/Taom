@@ -236,28 +236,37 @@ class TelegramController extends Controller
             $currentHour = now()->hour;
             $mealType = 'Tushlik'; // Default to lunch
 
-            if ($currentHour < 10) {
+            if ($currentHour >= 5 && $currentHour < 11) {
                 $mealType = 'Nonushta';
-            } elseif ($currentHour > 15) {
+            } elseif ($currentHour >= 11 && $currentHour < 16) {
+                $mealType = 'Tushlik';
+            } elseif ($currentHour >= 16 && $currentHour < 23) {
                 $mealType = 'Kechki ovqat';
+            } else {
+                $mealType = 'Kechki ovqat'; // Night time
             }
 
+            $today = now()->format('Y-m-d');
+            
+            // Check if there's already a record for today and this meal type
             $foodHistory = FoodHistory::where('user_id', $user->id)
                 ->where('meal_type', $mealType)
+                ->where('date', $today)
                 ->first();
 
             if ($foodHistory) {
+                // Update existing record
                 $foodHistory->update([
                     'food_id' => $food->id,
                 ]);
             } else {
-                // Store in FoodHistory
-            FoodHistory::create([
-                'user_id' => $user->id,
-                'food_id' => $food->id,
-                'meal_type' => $mealType,
-                'date' => now()->format('Y-m-d'),
-            ]);
+                // Create new record for today
+                FoodHistory::create([
+                    'user_id' => $user->id,
+                    'food_id' => $food->id,
+                    'meal_type' => $mealType,
+                    'date' => $today,
+                ]);
             }
 
             // Send confirmation message
@@ -289,11 +298,13 @@ class TelegramController extends Controller
     private function showFoodHistory(User $user, $messageId)
     {
         try {
-            // Get user's food history with food details
+            // Get user's food history with food details, grouped by date
             $foodHistory = FoodHistory::with('food')
                 ->where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
+                ->orderBy('date', 'desc')
+                ->orderBy('meal_type', 'asc')
+                ->get()
+                ->groupBy('date');
 
             if ($foodHistory->isEmpty()) {
                 Telegram::editMessageText([
@@ -312,15 +323,23 @@ class TelegramController extends Controller
             }
 
             // Format food history message
-            $message = "📋 *So'nggi tanlangan ovqatlar:*\n\n";
-            foreach ($foodHistory as $index => $history) {
-                $food = $history->food;
-                $date = $history->created_at->format('d.m.Y H:i');
-                $mealType = $history->meal_type;
-
-                $message .= ($index + 1) . ". *{$food->name_uz}*\n";
-                $message .= "   📅 {$date}\n";
-                $message .= "   ⏱️ {$mealType}\n\n";
+            $message = "📋 *Ovqat tarixi:*\n\n";
+            $dayCount = 0;
+            
+            foreach ($foodHistory as $date => $dayMeals) {
+                if ($dayCount >= 7) break; // Show only last 7 days
+                
+                $formattedDate = \Carbon\Carbon::parse($date)->format('d.m.Y');
+                $message .= "📅 *{$formattedDate}*\n";
+                
+                foreach ($dayMeals as $history) {
+                    $food = $history->food;
+                    $mealType = $history->meal_type;
+                    
+                    $message .= "   ⏱️ {$mealType}: *{$food->name_uz}*\n";
+                }
+                $message .= "\n";
+                $dayCount++;
             }
 
             Telegram::editMessageText([

@@ -23,6 +23,7 @@ use App\MoonShine\Resources\BotUserResource;
 use App\MoonShine\Resources\ProductCategoryResource;
 use App\MoonShine\Resources\ProductResource;
 use App\MoonShine\Resources\ProductVoteResource;
+use App\MoonShine\Resources\DailyReminderResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -47,6 +48,7 @@ class MoonShineServiceProvider extends ServiceProvider
                 ProductCategoryResource::class,
                 ProductResource::class,
                 ProductVoteResource::class,
+                DailyReminderResource::class,
             ])
             ->pages([
                 ...$config->getPages(),
